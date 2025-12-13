@@ -1,0 +1,2 @@
+# This keeps the folder in git even when empty
+touch models/.gitkeep
