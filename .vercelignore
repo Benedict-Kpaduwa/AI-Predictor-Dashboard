@@ -1,0 +1,44 @@
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+backend/venv/
+backend/__pycache__/
+
+# Node
+node_modules/
+.pnpm-store/
+
+# Docker
+*.dockerfile
+Dockerfile
+docker-compose.yml
+backend/docker-compose.yml
+backend/Dockerfile
+
+# Tests
+backend/tests/
+**/test_*.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (optional - uncomment if you want to exclude large data)
+# backend/data/*.csv
+
+# Build
+frontend/dist/
+frontend/build/
+

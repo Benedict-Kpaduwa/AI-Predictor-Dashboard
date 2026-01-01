@@ -1,5 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import pandas as pd
 import numpy as np
@@ -8,11 +10,11 @@ import io
 from datetime import datetime, timedelta
 import traceback
 import os
+import time
 
 
 from ml_model import MaintenancePredictor
 from data_processor import DataProcessor
-from fastapi.responses import StreamingResponse
 from pdf_generator import MaintenanceReportGenerator
 
 app = FastAPI(title="AI Maintenance Predictor API")
@@ -400,34 +402,23 @@ def get_training_status():
         "model_path": "models/maintenance_model.pkl"
     }
 
-@app.get("/")
-async def serve_react_app():
-    """Serve React app"""
-    static_path = os.getenv("STATIC_PATH", "static")
-    index_file = os.path.join(static_path, "index.html")
-    
-    if os.path.exists(index_file):
-        return FileResponse(index_file)
-    else:
-        return {
-            "message": "AI Maintenance Predictor API", 
-            "status": "running",
-            "docs": "/docs"
-        }
-
+# Serve static files for frontend (if deployed together)
 @app.get("/{full_path:path}")
-async def serve_react_routes(full_path: str):
-    """Serve React app for all routes"""
+async def serve_static_or_api(full_path: str):
+    """Serve React app for all other routes"""
     static_path = os.getenv("STATIC_PATH", "static")
     file_path = os.path.join(static_path, full_path)
 
+    # Check if the file exists in static directory
     if os.path.exists(file_path) and os.path.isfile(file_path):
         return FileResponse(file_path)
 
+    # Serve index.html for React routing
     index_file = os.path.join(static_path, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
     
+    # If no static files, return API info
     return {"error": "Not found", "api_docs": "/docs"}
 
 if __name__ == "__main__":
@@ -435,10 +426,4 @@ if __name__ == "__main__":
     print("Starting AI Maintenance Predictor API...")
     print("Note: Assets list starts empty until CSV is uploaded")
     print(f"Model Status: {'Trained ✓' if model.is_trained else 'Not Trained (using random predictions)'}")
-    uvicorn.run(app, host="0.0.0.0", port=5000)
-    
-try:
-    from mangum import Mangum
-    handler = Mangum(app, lifespan="off")
-except ImportError:
-    pass
+    uvicorn.run(app, host="0.0.0.0", port=8000)

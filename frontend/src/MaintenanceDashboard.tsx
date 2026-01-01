@@ -59,10 +59,9 @@ const MaintenanceDashboard: React.FC = () => {
 
   // const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-  const API_URL =
-    import.meta.env.NODE_ENV === "production"
-      ? "/api" // Vercel routes /api to our Python backend
-      : "http://localhost:8000";
+  const API_URL = import.meta.env.PROD
+    ? "/api" // Vercel routes /api to our Python backend
+    : "http://localhost:8000";
 
   const fetchAssets = async () => {
     setLoading(true);
