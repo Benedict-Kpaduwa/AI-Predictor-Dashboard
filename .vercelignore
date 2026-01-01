@@ -13,6 +13,8 @@ backend/__pycache__/
 # Node
 node_modules/
 .pnpm-store/
+pnpm-lock.yaml
+frontend/pnpm-lock.yaml
 
 # Docker
 *.dockerfile
