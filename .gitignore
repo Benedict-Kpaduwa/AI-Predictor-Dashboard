@@ -72,6 +72,3 @@ coverage/
 *.tmp
 *.temp
 
-# Vercel
-.vercel
-
