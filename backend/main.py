@@ -27,9 +27,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-static_path = os.getenv("STATIC_PATH", "static")
+# Serve frontend static files
+static_path = os.getenv("STATIC_PATH", "../frontend/dist")
 if os.path.exists(static_path):
-    app.mount("/static", StaticFiles(directory=static_path), name="static")
+    app.mount("/assets", StaticFiles(directory=os.path.join(static_path, "assets")), name="assets")
+    print(f"✓ Serving static files from: {static_path}")
 
 model = MaintenancePredictor()
 processor = DataProcessor()
@@ -406,7 +408,7 @@ def get_training_status():
 @app.get("/{full_path:path}")
 async def serve_static_or_api(full_path: str):
     """Serve React app for all other routes"""
-    static_path = os.getenv("STATIC_PATH", "static")
+    static_path = os.getenv("STATIC_PATH", "../frontend/dist")
     file_path = os.path.join(static_path, full_path)
 
     # Check if the file exists in static directory
@@ -426,4 +428,5 @@ if __name__ == "__main__":
     print("Starting AI Maintenance Predictor API...")
     print("Note: Assets list starts empty until CSV is uploaded")
     print(f"Model Status: {'Trained ✓' if model.is_trained else 'Not Trained (using random predictions)'}")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

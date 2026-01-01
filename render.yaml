@@ -1,0 +1,17 @@
+services:
+  # Web service for the full application
+  - type: web
+    name: ai-maintenance-predictor
+    env: python
+    region: oregon
+    plan: free
+    branch: master
+    buildCommand: "./build.sh"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: STATIC_PATH
+        value: ../frontend/dist
+    healthCheckPath: /
+

@@ -60,7 +60,7 @@ const MaintenanceDashboard: React.FC = () => {
   // const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   const API_URL = import.meta.env.PROD
-    ? "/api" // Vercel routes /api to our Python backend
+    ? "" // On Render, same origin (FastAPI serves frontend)
     : "http://localhost:8000";
 
   const fetchAssets = async () => {
