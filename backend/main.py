@@ -436,3 +436,9 @@ if __name__ == "__main__":
     print("Note: Assets list starts empty until CSV is uploaded")
     print(f"Model Status: {'Trained ✓' if model.is_trained else 'Not Trained (using random predictions)'}")
     uvicorn.run(app, host="0.0.0.0", port=5000)
+    
+try:
+    from mangum import Mangum
+    handler = Mangum(app, lifespan="off")
+except ImportError:
+    pass

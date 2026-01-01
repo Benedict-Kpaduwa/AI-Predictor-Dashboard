@@ -57,7 +57,12 @@ const MaintenanceDashboard: React.FC = () => {
   const [progressDialogOpen, setProgressDialogOpen] = useState<boolean>(false);
   const [exportingPDF, setExportingPDF] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  // const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+  const API_URL =
+    import.meta.env.NODE_ENV === "production"
+      ? "/api" // Vercel routes /api to our Python backend
+      : "http://localhost:8000";
 
   const fetchAssets = async () => {
     setLoading(true);
